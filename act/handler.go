@@ -197,6 +197,8 @@ func (h *Handler) routeFind(w http.ResponseWriter, r *http.Request, _ httprouter
 
 	nexusCache, err := h.nexus.FindCache(keys, version)
 	if nexusCache != nil {
+		fmt.Printf("Cache hit: %s", nexusCache.ArchiveLocation)
+		fmt.Printf("Cache key: %s", nexusCache.CacheKey)
 		h.responseJSON(w, r, 200, map[string]any{
 			"result":          "hit",
 			"archiveLocation": nexusCache.ArchiveLocation,
