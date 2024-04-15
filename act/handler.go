@@ -133,7 +133,7 @@ func (h *Handler) Serve() {
 
 func (h *Handler) ExternalURL() string {
 	// TODO: make the external url configurable if necessary
-	if os.Getenv("EXTERNAL_URL") == "" {
+	if os.Getenv("EXTERNAL_URL") != "" {
 		return os.Getenv("EXTERNAL_URL")
 	} else {
 		return fmt.Sprintf("http://%s:%d",
