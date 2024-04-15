@@ -133,9 +133,13 @@ func (h *Handler) Serve() {
 
 func (h *Handler) ExternalURL() string {
 	// TODO: make the external url configurable if necessary
-	return fmt.Sprintf("http://%s:%d",
-		h.outboundIP,
-		h.listener.Addr().(*net.TCPAddr).Port)
+	if os.Getenv("EXTERNAL_URL") == "" {
+		return os.Getenv("EXTERNAL_URL")
+	} else {
+		return fmt.Sprintf("http://%s:%d",
+			h.outboundIP,
+			h.listener.Addr().(*net.TCPAddr).Port)
+	}
 }
 
 func (h *Handler) Close() error {
@@ -198,7 +202,7 @@ func (h *Handler) routeFind(w http.ResponseWriter, r *http.Request, _ httprouter
 	nexusCache, err := h.nexus.FindCache(keys, version)
 	if nexusCache != nil {
 		fmt.Printf("Cache hit: %s", nexusCache.ArchiveLocation)
-		fmt.Printf("Cache key: %s", nexusCache.CacheKey)
+		fmt.Printf("Cache hit: %s", nexusCache.CacheKey)
 		h.responseJSON(w, r, 200, map[string]any{
 			"result":          "hit",
 			"archiveLocation": nexusCache.ArchiveLocation,
