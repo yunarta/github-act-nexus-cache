@@ -10,7 +10,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"slices"
 	"strconv"
 	"strings"
 	"sync/atomic"
@@ -43,16 +42,15 @@ type Handler struct {
 }
 
 func StartHandler(dir, outboundIP string, port uint16, logger logrus.FieldLogger) (*Handler, error) {
-	environ := os.Environ()
-	if !slices.Contains(environ, "NEXUS_STORE_ENDPOINT") {
+	if os.Getenv("NEXUS_STORE_ENDPOINT") == "" {
 		os.Setenv("NEXUS_STORE_ENDPOINT", "https://nxrm.mobilesolutionworks.com/repository/gh-action-cache/act-nexus-cache")
 	}
 
-	if !slices.Contains(environ, "NEXUS_USERNAME") {
+	if os.Getenv("NEXUS_USERNAME") == "" {
 		os.Setenv("NEXUS_USERNAME", "gh")
 	}
 
-	if !slices.Contains(environ, "NEXUS_SECRET") {
+	if os.Getenv("NEXUS_SECRET") == "" {
 		os.Setenv("NEXUS_SECRET", "gh")
 	}
 
